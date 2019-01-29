@@ -4,14 +4,54 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
+    static Random random = new Random();
+    static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый"};
     public static void main(String[] args) {
-
-        String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый"};
-        gameWithWords(secret);
+        System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1:{
+                do {
+                    gameWithRandomNumber();
+                    System.out.print("Сыграем еще? 1 - да, 0 - нет: ");
+                } while (sc.nextInt()!=0);
+                break;
+            }
+            case 2: {
+                gameWithWords(secret);
+                break;
+            }
+            case 0:{
+                break;
+            }default:break;
+        }
+        sc.close();
     }
+    //Задание 1
+    static void gameWithRandomNumber(){
+        int randomNumber = random.nextInt(9);
+        int number, theTry=0, attempt = 3;
+        System.out.print("Введите число от 0 до 9, у вас " + attempt + " попытки: ");
+        do {
+            number = sc.nextInt();
+            theTry++;
+            if (number < randomNumber && theTry!=attempt){
+                System.out.print(number + " - меньше загаданного числа, еще "+(attempt-theTry)+" попытки: ");
+            } else if (number > randomNumber && theTry!=attempt){
+                System.out.print(number + " - больше загаданного числа, еще "+(attempt-theTry)+" попытки: ");
+            } else {
+                System.out.println("Поздравляю!! Вы угадали, загаданное число - " + number);
+                break;
+            }
+            if (theTry ==3 && number!=randomNumber){
+                System.out.println("Сожалею, но Вы проиграли :( :( ;( ;(");
+            }
+        } while (theTry < attempt);
+
+    }
+    //Задание 2
     static void gameWithWords(String[] arrayOfWords){
-        Random random = new Random();
         int randomElement = random.nextInt(arrayOfWords.length);
         char[] charsRandomWord;
         char[] charsWord;
