@@ -9,9 +9,16 @@ public class Main {
     static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый","оранжевый", "лопата",
     "лапти"};
     public static void main(String[] args) {
-        System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
-        int choice = sc.nextInt();
-        switch (choice){
+        int status = 0;
+        while (status != 1){
+            System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
+            int choice = -1;
+            try {
+               choice = Integer.parseInt(sc.next());
+            } catch (NumberFormatException e){
+
+            }
+            switch (choice){
             case 1:{
                 do {
                     gameWithRandomNumber();
@@ -23,40 +30,53 @@ public class Main {
                 gameWithWords(secret);
                 break;
             }
-            case 0: break;
-            default:break;
+            case 0:
+                status = 1;
+                break;
+            default:
+                System.out.println("--------------------\n" +
+                        "Вы можете ввести только предложенные значения!!!\n" +
+                        "--------------------");
+        }
         }
         sc.close();
     }
     //Задание 1
     static void gameWithRandomNumber(){
         int randomNumber = random.nextInt(9);
-        int number, theTry=0, attempt = 3;
-        System.out.print("Введите число от 0 до 9, у вас " + attempt + " попытки: ");
+        int number = -1, attempt=0, maxAttempt = 3;
+        String attemptString;
+        System.out.print("Введите число от 0 до 9, у вас " + maxAttempt + " попытки: ");
         do {
-            number = sc.nextInt();
-            theTry++;
-            if (number < randomNumber && theTry!=attempt){
-                System.out.print(number + " - меньше загаданного числа, еще "+(attempt-theTry)+" попытки: ");
-            } else if (number > randomNumber && theTry!=attempt){
-                System.out.print(number + " - больше загаданного числа, еще "+(attempt-theTry)+" попытки: ");
+            try {
+                number = Integer.parseInt(sc.next());
+            } catch (NumberFormatException e){
+
+            }
+            attempt++;
+            attemptString = (maxAttempt-attempt) == 1 ? " попытка: ":" попытки: ";
+            if (number < 0 || number > 9 && attempt != maxAttempt){
+                System.out.print("Число должно быть от 0 до 9, еще " + (maxAttempt-attempt) + attemptString);
+            } else if (number < randomNumber && attempt != maxAttempt){
+                System.out.print(number + " - меньше загаданного числа, еще " + (maxAttempt-attempt) + attemptString);
+            } else if (number > randomNumber && attempt != maxAttempt){
+                System.out.print(number + " - больше загаданного числа, еще " + (maxAttempt-attempt) + attemptString);
             } else {
                 System.out.println("Поздравляю!! Вы угадали, загаданное число - " + number);
                 break;
             }
-            if (theTry ==3 && number!=randomNumber){
+            if (attempt == 3 && number != randomNumber){
                 System.out.println("Сожалею, но Вы проиграли :( :( ;( ;(");
             }
-        } while (theTry < attempt);
+        } while (attempt < maxAttempt);
 
     }
     //Задание 2
     static void gameWithWords(String[] arrayOfWords){
-        int randomElement = random.nextInt(arrayOfWords.length);
-        char[] charsRandomWord;
-        char[] charsWord;
+        int randomElement = random.nextInt(arrayOfWords.length-1);
+        String result;
+        char[] charsRandomWord, charsWord;
         charsRandomWord= wordToCharArray(arrayOfWords[randomElement]);
-        String res;
         System.out.println("\t\t\tСыграем в игру угадай слово!\n" +
                 "\tМы загадали случайное слово, а ты его должен угадать\n" +
                 "Внимание!! Длина слова не должна превышать 15 символов и " +
@@ -64,21 +84,22 @@ public class Main {
                 "\t\tНачнем!");
         do {
             System.out.println("Введите своё слово: ");
-            res= sc.next();
-            charsWord= wordToCharArray(res);
+            result= sc.next();
+            System.out.println(result);
+            charsWord= wordToCharArray(result);
             for (int i = 0; i < charsRandomWord.length; i++) {
                 if (charsWord[i]!=charsRandomWord[i]){
                     charsWord[i]='#';
                 }
             }
-            if (res.equals(arrayOfWords[randomElement])){
+            if (result.equals(arrayOfWords[randomElement])){
                 System.out.println("Поздравляем!! Вы победили!!!");
                 System.out.println("Загаданное слово - "+ arrayOfWords[randomElement]);
             } else {
                 System.out.println("Попробуй еще раз");
                 printCharArray(charsWord);
             }
-        } while (!res.equals(arrayOfWords[randomElement]));
+        } while (!result.equals(arrayOfWords[randomElement]));
         System.out.println();
     }
     static char[] wordToCharArray(String word){
