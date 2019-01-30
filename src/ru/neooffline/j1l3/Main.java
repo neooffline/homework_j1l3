@@ -6,7 +6,8 @@ import java.util.Scanner;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Random random = new Random();
-    static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый"};
+    static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый","оранжевый", "лопата",
+    "лапти"};
     public static void main(String[] args) {
         System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
         int choice = sc.nextInt();
@@ -22,9 +23,8 @@ public class Main {
                 gameWithWords(secret);
                 break;
             }
-            case 0:{
-                break;
-            }default:break;
+            case 0: break;
+            default:break;
         }
         sc.close();
     }
@@ -55,17 +55,17 @@ public class Main {
         int randomElement = random.nextInt(arrayOfWords.length);
         char[] charsRandomWord;
         char[] charsWord;
-        charsRandomWord=toCharArray(arrayOfWords[randomElement]);
+        charsRandomWord= wordToCharArray(arrayOfWords[randomElement]);
         String res;
         System.out.println("\t\t\tСыграем в игру угадай слово!\n" +
                 "\tМы загадали случайное слово, а ты его должен угадать\n" +
                 "Внимание!! Длина слова не должна превышать 15 символов и " +
-                "\nсодержит только прописные русские буквы.\n" +
+                "\nсодержит только строчные русские буквы.\n" +
                 "\t\tНачнем!");
         do {
             System.out.println("Введите своё слово: ");
             res= sc.next();
-            charsWord=toCharArray(res);
+            charsWord= wordToCharArray(res);
             for (int i = 0; i < charsRandomWord.length; i++) {
                 if (charsWord[i]!=charsRandomWord[i]){
                     charsWord[i]='#';
@@ -81,7 +81,7 @@ public class Main {
         } while (!res.equals(arrayOfWords[randomElement]));
         System.out.println();
     }
-    static char[] toCharArray(String word){
+    static char[] wordToCharArray(String word){
         char[] charArray = new char[15];
         if (word.length() < 15){
             for (int i = 0; i < word.length(); i++) {
