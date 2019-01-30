@@ -4,11 +4,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
     static Random random = new Random();
-    static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый", "сереневый","оранжевый", "лопата",
-    "лапти"};
+    protected static String CHARSET_LINUX = "utf-8";
+    protected static String CHARSET_WINDOWS = "cp866";
+    private static String charset;
+    static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый",
+            "сереневый", "оранжевый", "лопата", "лапти"};
     public static void main(String[] args) {
+        charset = System.getProperty("os.name").contains("Windows")?CHARSET_WINDOWS:CHARSET_LINUX;
+        Scanner sc = new Scanner(System.in,charset);
         int status = 0;
         while (status != 1){
             System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
@@ -43,6 +47,7 @@ public class Main {
     }
     //Задание 1
     static void gameWithRandomNumber(){
+        Scanner sc = new Scanner(System.in,charset);
         int randomNumber = random.nextInt(9);
         int number = -1, attempt=0, maxAttempt = 3;
         String attemptString;
@@ -69,10 +74,10 @@ public class Main {
                 System.out.println("Сожалею, но Вы проиграли :( :( ;( ;(");
             }
         } while (attempt < maxAttempt);
-
     }
     //Задание 2
     static void gameWithWords(String[] arrayOfWords){
+        Scanner sc = new Scanner(System.in,charset);
         int randomElement = random.nextInt(arrayOfWords.length-1);
         String result;
         char[] charsRandomWord, charsWord;
