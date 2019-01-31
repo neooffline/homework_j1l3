@@ -2,6 +2,7 @@ package ru.neooffline.j1l3;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,14 +18,14 @@ public class Main {
     public static void main(String[] args) {
         charset = System.getProperty("os.name").contains("Windows")?CHARSET_WINDOWS:CHARSET_LINUX;
         Scanner sc = new Scanner(System.in,charset);
-        int status = 0, choice;
+        int choice, continueGame, status = 0;
         while (status != 1){
             System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
             try {
                choice = Integer.parseInt(sc.next());
             } catch (NumberFormatException e){
                 e.printStackTrace(pw);
-                System.out.println("Ошибка в введенных данных: \n" + sw.toString());
+                System.out.println("Ошибка при вводе данных:\n" + sw.toString());
                 choice = -1;
             }
             switch (choice){
@@ -32,16 +33,24 @@ public class Main {
                 do {
                     gameWithRandomNumber();
                     System.out.print("Сыграем еще? 1 - да, 0 - нет: ");
-                } while (sc.nextInt()!=0);
+                    try {
+                        continueGame = sc.nextInt();
+                    } catch (InputMismatchException e){
+                        e.printStackTrace(pw);
+                        System.out.println("Ошибка при вводе данных:\n" + sw.toString());
+                        continueGame = -1;
+                    }
+                } while (continueGame != 0);
                 break;
             }
             case 2: {
                 gameWithWords(secret);
                 break;
             }
-            case 0:
+            case 0:{
                 status = 1;
                 break;
+            }
             default:
                 System.out.println("--------------------\n" +
                         "Вы можете ввести только предложенные значения!!!\n" +
@@ -49,6 +58,7 @@ public class Main {
             }
         }
         sc.close();
+        pw.close();
     }
     //Задание 1
     static void gameWithRandomNumber(){
