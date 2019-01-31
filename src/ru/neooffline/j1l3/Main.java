@@ -2,7 +2,6 @@ package ru.neooffline.j1l3;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         charset = System.getProperty("os.name").contains("Windows")?CHARSET_WINDOWS:CHARSET_LINUX;
         Scanner sc = new Scanner(System.in,charset);
-        int choice, continueGame, status = 0;
+        int choice, continueGame =1, status = 0;
         while (status != 1){
             System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
             try {
@@ -31,14 +30,21 @@ public class Main {
             switch (choice){
             case 1:{
                 do {
-                    gameWithRandomNumber();
+                    if (continueGame == 1){
+                        gameWithRandomNumber();
+                    }
                     System.out.print("Сыграем еще? 1 - да, 0 - нет: ");
                     try {
-                        continueGame = sc.nextInt();
-                    } catch (InputMismatchException e){
+                        continueGame = Integer.parseInt(sc.next());
+                    } catch (NumberFormatException e){
                         e.printStackTrace(pw);
                         System.out.println("Ошибка при вводе данных:\n" + sw.toString());
-                        continueGame = -1;
+                        System.out.println("Вы ввели не корректные данные, возврат в главное меню");
+                        continueGame = 0;
+                    }
+                    if (continueGame !=1 || continueGame != 0){
+                        System.out.println("Вы ввели не корректные данные, возврат в главное меню");
+                        continueGame = 0;
                     }
                 } while (continueGame != 0);
                 break;
