@@ -5,22 +5,23 @@ import java.util.Scanner;
 
 public class Main {
     static Random random = new Random();
-    protected static String CHARSET_LINUX = "utf-8";
-    protected static String CHARSET_WINDOWS = "cp866";
+    static String CHARSET_LINUX = "utf-8";
+    static String CHARSET_WINDOWS = "cp866";
     private static String charset;
     static String[] secret = {"новый", "старый", "молодой", "больной", "ситцевый",
-            "сереневый", "оранжевый", "лопата", "лапти"};
+            "сереневый", "оранжевый", "лопата", "лапти", "железо", "никель", "кобальт"};
     public static void main(String[] args) {
         charset = System.getProperty("os.name").contains("Windows")?CHARSET_WINDOWS:CHARSET_LINUX;
         Scanner sc = new Scanner(System.in,charset);
-        int status = 0;
+        int status = 0, choice;
         while (status != 1){
             System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
-            int choice = -1;
+
             try {
                choice = Integer.parseInt(sc.next());
             } catch (NumberFormatException e){
-
+                e.printStackTrace();
+                choice = -1;
             }
             switch (choice){
             case 1:{
@@ -49,14 +50,15 @@ public class Main {
     static void gameWithRandomNumber(){
         Scanner sc = new Scanner(System.in,charset);
         int randomNumber = random.nextInt(9);
-        int number = -1, attempt=0, maxAttempt = 3;
+        int number, attempt=0, maxAttempt = 3;
         String attemptString;
         System.out.print("Введите число от 0 до 9, у вас " + maxAttempt + " попытки: ");
         do {
             try {
                 number = Integer.parseInt(sc.next());
             } catch (NumberFormatException e){
-
+                e.printStackTrace();
+                number = -1;
             }
             attempt++;
             attemptString = (maxAttempt-attempt) == 1 ? " попытка: ":" попытки: ";
@@ -66,12 +68,12 @@ public class Main {
                 System.out.print(number + " - меньше загаданного числа, еще " + (maxAttempt-attempt) + attemptString);
             } else if (number > randomNumber && attempt != maxAttempt){
                 System.out.print(number + " - больше загаданного числа, еще " + (maxAttempt-attempt) + attemptString);
-            } else {
+            } else if (attempt == 3 && number != randomNumber){
+                System.out.println("Сожалею, но Вы проиграли :( :( ;( ;(");
+            }
+            else {
                 System.out.println("Поздравляю!! Вы угадали, загаданное число - " + number);
                 break;
-            }
-            if (attempt == 3 && number != randomNumber){
-                System.out.println("Сожалею, но Вы проиграли :( :( ;( ;(");
             }
         } while (attempt < maxAttempt);
     }
@@ -85,8 +87,9 @@ public class Main {
         System.out.println("\t\t\tСыграем в игру угадай слово!\n" +
                 "\tМы загадали случайное слово, а ты его должен угадать\n" +
                 "Внимание!! Длина слова не должна превышать 15 символов и " +
-                "\nсодержит только строчные русские буквы.\n" +
-                "\t\tНачнем!");
+                "\nсодержит только строчные русские буквы.\n"+
+                "список слов, прдставлен ниже:");
+        printWordArray(arrayOfWords);
         do {
             System.out.println("Введите своё слово: ");
             result= sc.next();
@@ -128,5 +131,18 @@ public class Main {
             System.out.print(item);
         }
         System.out.println();
+    }
+    static void printWordArray(String[] arrayOfWords){
+        System.out.println("-----------------------");
+        for (int i = 0; i < arrayOfWords.length; i++) {
+            if (i != 0 && i%5 == 0 && i != arrayOfWords.length -1){
+                System.out.print(arrayOfWords[i] + ",\n");
+            } else if (i != arrayOfWords.length -1){
+            System.out.print(arrayOfWords[i] + ", ");
+            } else {
+                System.out.println(arrayOfWords[i]+".");
+            }
+        }
+        System.out.println("-----------------------");
     }
 }
