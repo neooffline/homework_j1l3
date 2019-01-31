@@ -1,10 +1,14 @@
 package ru.neooffline.j1l3;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     static Random random = new Random();
+    static StringWriter sw = new StringWriter();
+    static PrintWriter pw = new PrintWriter(sw);
     static String CHARSET_LINUX = "utf-8";
     static String CHARSET_WINDOWS = "cp866";
     private static String charset;
@@ -16,11 +20,11 @@ public class Main {
         int status = 0, choice;
         while (status != 1){
             System.out.print("Игрый на выбор:\n0. Выход\n1. Угадай число\n2. Угадай слово\nВаш выбор: ");
-
             try {
                choice = Integer.parseInt(sc.next());
             } catch (NumberFormatException e){
-                e.printStackTrace();
+                e.printStackTrace(pw);
+                System.out.println("Ошибка в введенных данных: \n" + sw.toString());
                 choice = -1;
             }
             switch (choice){
@@ -42,7 +46,7 @@ public class Main {
                 System.out.println("--------------------\n" +
                         "Вы можете ввести только предложенные значения!!!\n" +
                         "--------------------");
-        }
+            }
         }
         sc.close();
     }
@@ -57,7 +61,8 @@ public class Main {
             try {
                 number = Integer.parseInt(sc.next());
             } catch (NumberFormatException e){
-                e.printStackTrace();
+                e.printStackTrace(pw);
+                System.out.println("Ошибка в веденных данных:\n" + sw.toString());
                 number = -1;
             }
             attempt++;
